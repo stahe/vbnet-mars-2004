@@ -1,0 +1,1509 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Introduction au langage VB.NET par l'exemple">
+      
+      
+        <meta name="author" content="Serge Tahé">
+      
+      
+        <link rel="canonical" href="https://stahe.github.io/vbnet-mars-2004/----les-threads-dexecution.html">
+      
+      
+        <link rel="prev" href="acces-aux-bases-de-donnees.html">
+      
+      
+        <link rel="next" href="programmation-tcp-ip.html">
+      
+      
+        
+      
+      
+      <link rel="icon" href="assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.0">
+    
+    
+      
+        <title>8. Les threads d'exécution - Introduction au langage VB.NET par l'exemple</title>
+      
+    
+    
+      <link rel="stylesheet" href="assets/stylesheets/main.618322db.min.css">
+      
+        
+        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="stylesheets/focus.css">
+    
+    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EBZC3JVJNR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    var siteName = "Introduction au langage VB.NET par l'exemple";
+    gtag('config', 'G-EBZC3JVJNR', {
+        'page_title': siteName
+    });
+  </script>
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#8-les-threads-dexecution" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="index.html" title="Introduction au langage VB.NET par l&#39;exemple" class="md-header__button md-logo" aria-label="Introduction au langage VB.NET par l'exemple" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Introduction au langage VB.NET par l'exemple
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              8.     Les threads d'exécution
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="teal" data-md-color-accent="purple"  aria-label="Passer au mode sombre"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Passer au mode sombre" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="teal" data-md-color-accent="purple"  aria-label="Passer au mode clair"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Passer au mode clair" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://stahe.github.io/vbnet-mars-2004" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="index.html" title="Introduction au langage VB.NET par l&#39;exemple" class="md-nav__button md-logo" aria-label="Introduction au langage VB.NET par l'exemple" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Introduction au langage VB.NET par l'exemple
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://stahe.github.io/vbnet-mars-2004" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    GitHub
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="index.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accueil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="introduction.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Introduction
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="les-bases-du-langage-vbnet.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Les bases du langage VB.NET
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="classes-stuctures-interfaces.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Classes, stuctures, interfaces
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="classes-net-dusage-courant.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Classes .NET d'usage courant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="interfaces-graphiques-avec-vbnet-et-vsnet.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Interfaces graphiques avec VB.NET et VS.NET
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="gestion-devenements.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Gestion d'événements
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="acces-aux-bases-de-donnees.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Accès aux bases de données
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8.     Les threads d'exécution
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="----les-threads-dexecution.html" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8.     Les threads d'exécution
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#81-introduction" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.1. Introduction
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#82-creation-de-threads-dexecution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.2. Création de threads d&#x27;exécution
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#83-interet-des-threads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.3. Intérêt des threads
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#84-acces-a-des-ressources-partagees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.4. Accès à des ressources partagées
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#85-acces-exclusif-a-une-ressource-partagee" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.5. Accès exclusif à une ressource partagée
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#86-synchronisation-par-evenements" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8.6. Synchronisation par événements
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="programmation-tcp-ip.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Programmation TCP-IP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="services-web.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Services Web
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="a-suivre.html" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    11. A suivre…
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="8-les-threads-dexecution">8. Les threads d&#x27;exécution</h1>
+<h2 id="81-introduction">8.1. Introduction</h2>
+<p>Lorsqu&#x27;on lance une application, elle s&#x27;exécute dans un flux d&#x27;exécution appelé un <strong>thread</strong>. La classe .NET modélisant un <em>thread</em> est la classe <em>System.Threading.Thread</em> et a la définition suivante :</p>
+<p><img src="images/100000000000022B0000009C8D3F3E58.png" style="width:14.683cm;height:4.128cm;" alt="Image" class="odt-zoomable" data-zoom-src="images/100000000000022B0000009C8D3F3E58.png" /></p>
+<p>Nous n&#x27;utiliserons que certaines des propriétés et méthodes de cette classe :</p>
+<table class="odt-table" style="border-collapse: collapse; width: 100%; margin-bottom: 1em;"><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><div markdown="block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>CurrentThread - propriété statique
+</code></pre></div>
+</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><p style="margin:0;">donne le thread actuellement en cours d&#x27;exécution</p></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><div markdown="block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Name - propriété d&#39;objet
+</code></pre></div>
+</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><p style="margin:0;">nom du thread</p></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><div markdown="block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>isAlive - propriété d&#39;objet
+</code></pre></div>
+</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><p style="margin:0;">indique si le thread est actif(true) ou non (false)</p></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><div markdown="block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Start - méthode d&#39;objet
+</code></pre></div>
+</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><p style="margin:0;">lance l&#x27;exécution d&#x27;un thread</p></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><div markdown="block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>Abort - méthode d&#39;objet
+</code></pre></div>
+</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><p style="margin:0;">arrête définitivement l&#x27;exécution d&#x27;un thread</p></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><div markdown="block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>Sleep(n) - méthode statique
+</code></pre></div>
+</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><p style="margin:0;">arrête l&#x27;exécution d&#x27;un thread pendant n millisecondes</p></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><div markdown="block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>Suspend() - méthode d&#39;objet
+</code></pre></div>
+</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><p style="margin:0;">suspend temporairement l&#x27;exécution d&#x27;un thread</p></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><div markdown="block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>Resume() - méthode d&#39;objet
+</code></pre></div>
+</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><p style="margin:0;">reprend l&#x27;excéution d&#x27;un thread suspendu</p></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><div markdown="block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>Join() - méthode d&#39;objet
+</code></pre></div>
+</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><p style="margin:0;">opération bloquante - attend la fin du thread pour passer à l&#x27;instruction suivante</p></td></tr></table>
+
+<p>Regardons une première application mettant en évidence l&#x27;existence d&#x27;un thread principal d&#x27;exécution, celui dans lequel s&#x27;exécute la fonction <em>Main</em> d&#x27;une classe :</p>
+<div class="odt-code-rich" data-linenums="true" style="counter-reset: odtline 0;"><pre><code class="language-vb.net">
+<span class="odt-code-line">&#x27; utilisation de threads</span>
+<span class="odt-code-line"><span style="color:#0000ff">Imports</span> System</span>
+<span class="odt-code-line"><span style="color:#0000ff">Imports</span> System.Threading</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line"><span style="color:#0000ff">Public</span> <span style="color:#0000ff">Module</span> thread1</span>
+<span class="odt-code-line">    <span style="color:#0000ff">Public</span> <span style="color:#0000ff">Sub</span> Main()</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; init thread courant</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> main <span style="color:#0000ff">As</span> Thread = Thread.CurrentThread</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; affichage</span></span>
+<span class="odt-code-line">        Console.Out.WriteLine((&quot;Thread courant : &quot; + main.Name))</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; on change le nom</span></span>
+<span class="odt-code-line">        main.Name = &quot;main&quot;</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; vérification</span></span>
+<span class="odt-code-line">        Console.Out.WriteLine((&quot;Thread courant : &quot; + main.Name))</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; boucle infinie</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">While</span> <span style="color:#0000ff">True</span></span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; affichage</span></span>
+<span class="odt-code-line">            Console.Out.WriteLine((main.Name + &quot; : &quot; + DateTime.Now.ToString(&quot;hh:mm:ss&quot;)))</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; arrêt temporaire</span></span>
+<span class="odt-code-line">            Thread.Sleep(1000)</span>
+<span class="odt-code-line">        <span style="color:#0000ff">End</span> <span style="color:#0000ff">While</span></span>
+<span class="odt-code-line">    <span style="color:#0000ff">End</span> <span style="color:#0000ff">Sub</span></span>
+<span class="odt-code-line"><span style="color:#0000ff">End</span> <span style="color:#0000ff">Module</span></span>
+</code></pre></div>
+
+<p>Les résultats écran :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a>dos&gt;thread1
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>Thread courant :
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>Thread courant : main
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a>main : 06:13:55
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a>main : 06:13:56
+<a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a>main : 06:13:57
+<a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a>main : 06:13:58
+<a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>main : 06:13:59
+</code></pre></div>
+<p>L&#x27;exemple précédent illustre les points suivants :</p>
+<ul>
+  <li>la fonction <i>Main</i> s&#x27;exécute bien dans un thread
+  </li>
+  <li>on a accès aux caractéristiques de ce thread par <i>Thread.CurrentThread</i>
+  </li>
+  <li>le rôle de la méthode <i>Sleep</i>. Ici le thread exécutant <i>Main</i> se met en sommeil régulièrement pendant 1 seconde entre deux affichages.
+  </li>
+</ul>
+
+<h2 id="82-creation-de-threads-dexecution">8.2. Création de threads d&#x27;exécution</h2>
+<p>Il est possible d&#x27;avoir des applications où des morceaux de code s&#x27;exécutent de façon &quot;simultanée&quot; dans différents threads d&#x27;exécution. Lorsqu&#x27;on dit que des <em>thread</em>s s&#x27;exécutent de façon simultanée, on commet souvent un abus de langage. Si la machine n&#x27;a qu&#x27;un processeur comme c&#x27;est encore souvent le cas, les <em>thread</em>s se partagent ce processeur : ils en disposent, chacun leur tour, pendant un court instant (quelques millisecondes). C&#x27;est ce qui donne l&#x27;illusion du parallélisme d&#x27;exécution. La portion de temps accordée à un <em>thread</em> dépend de divers facteurs dont sa priorité qui a une valeur par défaut mais qui peut être fixée également par programmation. Lorsqu&#x27;un <em>thread</em> dispose du processeur, il l&#x27;utilise normalement pendant tout le temps qui lui a été accordé. Cependant, il peut le libérer avant terme :</p>
+<ul>
+  <li>en se mettant en attente d&#x27;un événement (<i>wait, join, suspend</i>)
+  </li>
+  <li>en se mettant en sommeil pendant un temps déterminé (<i>sleep</i>)
+  </li>
+</ul>
+
+<ol>
+  <li>Un <b>thread T</b> est d&#x27;abord créé par son constructeur 
+  </li>
+</ol>
+
+<div class="highlight"><pre><span></span><code><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="k">Public</span><span class="w"> </span><span class="k">Sub</span><span class="w"> </span><span class="nf">New</span><span class="p">(</span><span class="k">ByVal</span><span class="w"> </span><span class="n">start</span><span class="w"> </span><span class="ow">As</span><span class="w"> </span><span class="n">ThreadStart</span><span class="p">)</span>
+</code></pre></div>
+<p><em>ThreadStart</em> est de type delegate et définit le prototype d&#x27;une fonction sans paramètres :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-11-1" name="__codelineno-11-1" href="#__codelineno-11-1"></a><span class="k">Public</span><span class="w"> </span><span class="k">Delegate</span><span class="w"> </span><span class="k">Sub</span><span class="w"> </span><span class="nf">ThreadStart</span><span class="p">()</span>
+</code></pre></div>
+<p>Une construction classique est la suivante :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-12-1" name="__codelineno-12-1" href="#__codelineno-12-1"></a>dim T as Thread=new Thread(new ThreadStart(run));
+</code></pre></div>
+<p>La fonction <em>run</em> passée en paramètres sera exécutée au lancement du Thread.</p>
+<ol start="2">
+  <li>L&#x27;exécution du thread T est lancé par <b>T.Start()</b> : la fonction [run] passée au constructeur de T va alors être exécutée par le thread T. Le programme qui exécute l&#x27;instruction <i>T.start()</i> n&#x27;attend pas la fin de la tâche T : il passe aussitôt à l&#x27;instruction qui suit. On a alors deux tâches qui s&#x27;exécutent en parallèle. Elles doivent souvent pouvoir communiquer entre elles pour savoir où en est le travail commun à réaliser. C&#x27;est le problème de synchronisation des threads.
+  </li>
+</ol>
+
+<ol start="3">
+  <li>Une fois lancé, le t<i>hread </i>s&#x27;exécute de façon autonome. Il s&#x27;arrêtera lorsque la fonction <i>start</i> qu&#x27;il exécute aura fini son travail.
+  </li>
+</ol>
+
+<ol start="4">
+  <li>On peut envoyer certains signaux à la tâche T :
+    <ol>
+      <li><b>T.Suspend()</b> lui dit de s&#x27;arrêter momentanément
+      </li>
+      <li><b>T.Resume()</b> lui dit de reprendre son travail
+      </li>
+      <li><b>T.Abort()</b> lui dit de s&#x27;arrêter définitivement
+      </li>
+    </ol>
+  </li>
+</ol>
+
+<ol start="5">
+  <li>On peut aussi attendre la fin de son exécution par <b>T.join()</b>. On a là une instruction bloquante : le programme qui l&#x27;exécute est bloqué jusqu&#x27;à ce que la tâche T ait terminé son travail. C&#x27;est un moyen de synchronisation.
+  </li>
+</ol>
+
+<p>Examinons le programme suivant :</p>
+<div class="odt-code-rich" data-linenums="true" style="counter-reset: odtline 0;"><pre><code class="language-vb.net">
+<span class="odt-code-line">&#x27; options</span>
+<span class="odt-code-line"><span style="color:#0000ff">Option</span> <span style="color:#0000ff">Strict</span> <span style="color:#0000ff">On</span></span>
+<span class="odt-code-line"><span style="color:#0000ff">Option</span> <span style="color:#0000ff">Explicit</span> <span style="color:#0000ff">On</span> </span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">&#x27; espaces de noms</span>
+<span class="odt-code-line"><span style="color:#0000ff">Imports</span> System</span>
+<span class="odt-code-line"><span style="color:#0000ff">Imports</span> System.Threading</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line"><span style="color:#0000ff">Module</span> thread2</span>
+<span class="odt-code-line">    <span style="color:#0000ff">Public</span> <span style="color:#0000ff">Sub</span> Main()</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; init Thread courant</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> main <span style="color:#0000ff">As</span> Thread = Thread.CurrentThread</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; on fixe un nom au Thread</span></span>
+<span class="odt-code-line">        main.Name = &quot;main&quot;</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; création de threads d&#x27;exécution</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> tâches(4) <span style="color:#0000ff">As</span> Thread</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> i <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">For</span> i = 0 <span style="color:#0000ff">To</span> tâches.Length - 1</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; on crée le thread i</span></span>
+<span class="odt-code-line">            tâches(i) = <span style="color:#0000ff">New</span> Thread(<span style="color:#0000ff">New</span> ThreadStart(<span style="color:#0000ff">AddressOf</span> affiche))</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; on fixe le nom du thread</span></span>
+<span class="odt-code-line">            tâches(i).Name = &quot;tache_&quot; &amp; i</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; on lance l&#x27;exécution du thread i</span></span>
+<span class="odt-code-line">            tâches(i).Start()</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Next</span> i</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; fin de main</span></span>
+<span class="odt-code-line">        Console.Out.WriteLine((&quot;fin du thread &quot; + main.Name))</span>
+<span class="odt-code-line">    <span style="color:#0000ff">End</span> <span style="color:#0000ff">Sub</span></span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Public</span> <span style="color:#0000ff">Sub</span> affiche()</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; affichage début d&#x27;exécution</span></span>
+<span class="odt-code-line">        Console.Out.WriteLine((&quot;Début d&#x27;exécution de la méthode affiche dans le Thread &quot; + Thread.CurrentThread.Name + &quot; : &quot; + DateTime.Now.ToString(&quot;hh:mm:ss&quot;)))</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; mise en sommeil pendant 1 s</span></span>
+<span class="odt-code-line">        Thread.Sleep(1000)</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; affichage fin d&#x27;exécution</span></span>
+<span class="odt-code-line">        Console.Out.WriteLine((&quot;Fin d&#x27;exécution de la méthode affiche dans le Thread &quot; + Thread.CurrentThread.Name + &quot; : &quot; + DateTime.Now.ToString(&quot;hh:mm:ss&quot;)))</span>
+<span class="odt-code-line">    <span style="color:#0000ff">End</span> <span style="color:#0000ff">Sub</span></span>
+<span class="odt-code-line"><span style="color:#0000ff">End</span> <span style="color:#0000ff">Module</span></span>
+</code></pre></div>
+
+<p>Le thread principal, celui qui exécute la fonction <em>Main</em>, crée 5 autres threads chargés d&#x27;exécuter la méthode statique <em>affiche</em>. Les résultats sont les suivants :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-13-1" name="__codelineno-13-1" href="#__codelineno-13-1"></a>dos&gt;thread2
+<a id="__codelineno-13-2" name="__codelineno-13-2" href="#__codelineno-13-2"></a>fin du thread main
+<a id="__codelineno-13-3" name="__codelineno-13-3" href="#__codelineno-13-3"></a>Début d&#39;exécution de la méthode affiche dans le Thread tache_0 : 05:27:53
+<a id="__codelineno-13-4" name="__codelineno-13-4" href="#__codelineno-13-4"></a>Début d&#39;exécution de la méthode affiche dans le Thread tache_1 : 05:27:53
+<a id="__codelineno-13-5" name="__codelineno-13-5" href="#__codelineno-13-5"></a>Début d&#39;exécution de la méthode affiche dans le Thread tache_2 : 05:27:53
+<a id="__codelineno-13-6" name="__codelineno-13-6" href="#__codelineno-13-6"></a>Début d&#39;exécution de la méthode affiche dans le Thread tache_3 : 05:27:53
+<a id="__codelineno-13-7" name="__codelineno-13-7" href="#__codelineno-13-7"></a>Début d&#39;exécution de la méthode affiche dans le Thread tache_4 : 05:27:53
+<a id="__codelineno-13-8" name="__codelineno-13-8" href="#__codelineno-13-8"></a>Fin d&#39;exécution de la méthode affiche dans le Thread tache_0 : 05:27:54
+<a id="__codelineno-13-9" name="__codelineno-13-9" href="#__codelineno-13-9"></a>Fin d&#39;exécution de la méthode affiche dans le Thread tache_1 : 05:27:54
+<a id="__codelineno-13-10" name="__codelineno-13-10" href="#__codelineno-13-10"></a>Fin d&#39;exécution de la méthode affiche dans le Thread tache_2 : 05:27:54
+<a id="__codelineno-13-11" name="__codelineno-13-11" href="#__codelineno-13-11"></a>Fin d&#39;exécution de la méthode affiche dans le Thread tache_3 : 05:27:54
+<a id="__codelineno-13-12" name="__codelineno-13-12" href="#__codelineno-13-12"></a>Fin d&#39;exécution de la méthode affiche dans le Thread tache_4 : 05:27:54
+</code></pre></div>
+<p>Ces résultats sont très instructifs :</p>
+<ul>
+  <li>on voit tout d&#x27;abord que le lancement de l&#x27;exécution d&#x27;un thread n&#x27;est pas bloquante. La méthode <i>Main</i> a lancé l&#x27;exécution de 5 threads en parallèle et a terminé son exécution avant eux. L&#x27;opération
+  </li>
+</ul>
+
+<div class="highlight"><pre><span></span><code><a id="__codelineno-14-1" name="__codelineno-14-1" href="#__codelineno-14-1"></a>            &#39; on lance l&#39;exécution du thread i
+<a id="__codelineno-14-2" name="__codelineno-14-2" href="#__codelineno-14-2"></a>            tâches(i).Start()
+</code></pre></div>
+<p>lance l&#x27;exécution du thread <em>tâches[i]</em> mais ceci fait, l&#x27;exécution se poursuit immédiatement avec l&#x27;instruction qui suit sans attendre la fin d&#x27;exécution du thread.</p>
+<ul>
+  <li>tous les threads créés doivent exécuter la méthode <i>affiche</i>. L&#x27;ordre d&#x27;exécution est imprévisible. Même si dans l&#x27;exemple, l&#x27;ordre d&#x27;exécution semble suivre l&#x27;ordre des demandes d&#x27;exécution, on ne peut en conclure de généralités. Le système d&#x27;exploitation a ici 6 threads et un processeur. Il va distribuer le processeur à ces 6 threads selon des règles qui lui sont propres.
+  </li>
+  <li>on voit dans les résultats une conséquence de la méthode <i>Sleep</i>. dans l&#x27;exemple, c&#x27;est le thread 0 qui exécute le premier la méthode <i>affiche</i>. Le message de début d&#x27;exécution est affiché puis il exécute la méthode <i>Sleep</i> qui le suspend pendant 1 seconde. Il perd alors le processeur qui devient ainsi disponible pour un autre thread. L&#x27;exemple montre que c&#x27;est le thread 1 qui va l&#x27;obtenir. Le thread 1 va suivre le même parcours ainsi que les autres threads. Lorsque la seconde de sommeil du thread 0 va être terminée, son exécution peut reprendre. Le système lui donne le processeur et il peut terminer l&#x27;exécution de la méthode <i>affiche</i>.
+  </li>
+</ul>
+
+<p>Modifions notre programme pour le terminer la méthode <em>Main</em> par les instructions :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-15-1" name="__codelineno-15-1" href="#__codelineno-15-1"></a>        &#39; fin de main
+<a id="__codelineno-15-2" name="__codelineno-15-2" href="#__codelineno-15-2"></a>        Console.Out.WriteLine((&quot;fin du thread &quot; + main.Name))
+<a id="__codelineno-15-3" name="__codelineno-15-3" href="#__codelineno-15-3"></a>        Environment.Exit(0)
+</code></pre></div>
+<p>L&#x27;exécution du nouveau programme donne :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-16-1" name="__codelineno-16-1" href="#__codelineno-16-1"></a>fin du thread main
+</code></pre></div>
+<p>Les threads créés par la fonction <em>Main</em> ne sont pas exécutés. C&#x27;est l&#x27;instruction</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-17-1" name="__codelineno-17-1" href="#__codelineno-17-1"></a>        Environment.Exit(0)
+</code></pre></div>
+<p>qui fait cela : elle supprime tous les threads de l&#x27;application et non simplement le thread <em>Main</em>. La solution à ce problème est que la méthode <em>Main</em> attende la fin d&#x27;exécution des threads qu&#x27;elle a créés avant de se terminer elle-même. Cela peut se faire avec la méthode <em>Join</em> de la classe <em>Thread</em> :</p>
+<div class="odt-code-rich" data-linenums="false" style="counter-reset: odtline 0;"><pre><code class="language-text">
+<span class="odt-code-line">        &#x27; on attend la fin d&#x27;exécution de tous les threads</span>
+<span class="odt-code-line">        <span style="color:#0000ff">For</span> i = 0 <span style="color:#0000ff">To</span> tâches.Length - 1</span>
+<span class="odt-code-line">            &#x27; attente de la fin d&#x27;exécution du thread i</span>
+<span class="odt-code-line">            tâches(i).Join()</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Next</span> i        &#x27;for</span>
+<span class="odt-code-line">        &#x27; fin de main</span>
+<span class="odt-code-line">        Console.Out.WriteLine((&quot;fin du thread &quot; + main.Name))</span>
+<span class="odt-code-line">        Environment.Exit(0)</span>
+</code></pre></div>
+
+<p>On obtient alors les résultats suivants :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-18-1" name="__codelineno-18-1" href="#__codelineno-18-1"></a>Début d&#39;exécution de la méthode affiche dans le Thread tache_1 : 05:34:48
+<a id="__codelineno-18-2" name="__codelineno-18-2" href="#__codelineno-18-2"></a>Début d&#39;exécution de la méthode affiche dans le Thread tache_2 : 05:34:48
+<a id="__codelineno-18-3" name="__codelineno-18-3" href="#__codelineno-18-3"></a>Début d&#39;exécution de la méthode affiche dans le Thread tache_3 : 05:34:48
+<a id="__codelineno-18-4" name="__codelineno-18-4" href="#__codelineno-18-4"></a>Début d&#39;exécution de la méthode affiche dans le Thread tache_4 : 05:34:48
+<a id="__codelineno-18-5" name="__codelineno-18-5" href="#__codelineno-18-5"></a>Début d&#39;exécution de la méthode affiche dans le Thread tache_0 : 05:34:48
+<a id="__codelineno-18-6" name="__codelineno-18-6" href="#__codelineno-18-6"></a>Fin d&#39;exécution de la méthode affiche dans le Thread tache_2 : 05:34:50
+<a id="__codelineno-18-7" name="__codelineno-18-7" href="#__codelineno-18-7"></a>Fin d&#39;exécution de la méthode affiche dans le Thread tache_1 : 05:34:50
+<a id="__codelineno-18-8" name="__codelineno-18-8" href="#__codelineno-18-8"></a>Fin d&#39;exécution de la méthode affiche dans le Thread tache_3 : 05:34:50
+<a id="__codelineno-18-9" name="__codelineno-18-9" href="#__codelineno-18-9"></a>Fin d&#39;exécution de la méthode affiche dans le Thread tache_0 : 05:34:50
+<a id="__codelineno-18-10" name="__codelineno-18-10" href="#__codelineno-18-10"></a>Fin d&#39;exécution de la méthode affiche dans le Thread tache_4 : 05:34:50
+<a id="__codelineno-18-11" name="__codelineno-18-11" href="#__codelineno-18-11"></a>fin du thread main
+</code></pre></div>
+<h2 id="83-interet-des-threads">8.3. Intérêt des threads</h2>
+<p>Maintenant que nous avons mis en évidence l&#x27;existence d&#x27;un thread par défaut, celui qui exécute la méthode <em>Main</em>, et que nous savons comment en créer d&#x27;autres, arrêtons-nous sur l&#x27;intérêt pour nous des threads et sur la raison pour laquelle nous les présentons ici. Il y a un type d&#x27;applications qui se prêtent bien à l&#x27;utilisation des threads, ce sont les applications client-serveur de l&#x27;internet. Dans une telle application, un serveur situé sur une machine S1 répond aux demandes de clients situés sur des machines distantes C1, C2, ..., Cn.</p>
+<table class="odt-table" style="border-collapse: collapse; width: 100%; margin-bottom: 1em;"><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><img src="images/10000000000003C300000142887AC200.png" style="display:inline-block; margin:4px;width:12.741cm;height:4.26cm;" class="odt-zoomable" data-zoom-src="images/10000000000003C300000142887AC200.png" /></td></tr></table>
+
+<p>Nous utilisons tous les jours des applications de l&#x27;internet correspondant à ce schéma : services Web, messagerie électronique, consultation de forums, transfert de fichiers... Dans le schéma ci-dessus, le serveur S1 doit servir les clients Ci de façon simultanée. Si nous prenons l&#x27;exemple d&#x27;un serveur FTP (File Transfer Protocol) qui délivre des fichiers à ses clients, nous savons qu&#x27;un transfert de fichier peut prendre parfois plusieurs heures. Il est bien sûr hors de question qu&#x27;un client monopolise tout seul le serveur une telle durée. Ce qui est fait habituellement, c&#x27;est que le serveur crée autant de threads d&#x27;exécution qu&#x27;il y a de clients. Chaque thread est alors chargé de s&#x27;occuper d&#x27;un client particulier. Le processeur étant partagé cycliquement entre tous les threads actifs de la machine, le serveur passe alors un peu de temps avec chaque client assurant ainsi la simultanéité du service.</p>
+<table class="odt-table" style="border-collapse: collapse; width: 100%; margin-bottom: 1em;"><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><img src="images/10000000000003F0000002123A8BF4BB.png" style="display:inline-block; margin:4px;width:13.335cm;height:7.011cm;" class="odt-zoomable" data-zoom-src="images/10000000000003F0000002123A8BF4BB.png" /></td></tr></table>
+
+<h2 id="84-acces-a-des-ressources-partagees">8.4. Accès à des ressources partagées</h2>
+<p>Dans l&#x27;exemple client-serveur évoqué ci-dessus, chaque thread sert un client de façon largement indépendante. Néanmoins, les threads peuvent être amenés à coopérer pour rendre le service demandé à leur client notamment pour l&#x27;accès à des ressources partagées. Le schéma ci-dessus fait penser aux guichets d&#x27;une grande administration, une poste par exemple où à chaque guichet un agent sert un client. Supposons que de temps en temps ces agents soient amenés à faire des photocopies de documents amenés par leurs clients et qu&#x27;il n&#x27;y ait qu&#x27;une photocopieuse. Deux agents ne peuvent utiliser la photocopieuse en même temps. Si l&#x27;agent i trouve la photocopieuse utilisée par l&#x27;agent j, il devra attendre. On appelle cette situation, l&#x27;accès à une ressource partagée et en informatique elle est assez délicate à gérer. Prenons l&#x27;exemple suivant :</p>
+<ul>
+  <li>une application va générer n threads, n étant passé en paramètre
+  </li>
+  <li>la ressource partagée est un compteur qui devra être incrémenté par chaque thread généré
+  </li>
+  <li>à la fin de l&#x27;application, la valeur du compteur est affiché. On devrait donc trouver n.
+  </li>
+</ul>
+
+<p>Le programme est le suivant :</p>
+<div class="odt-code-rich" data-linenums="true" style="counter-reset: odtline 0;"><pre><code class="language-vb.net">
+<span class="odt-code-line">&#x27; options</span>
+<span class="odt-code-line"><span style="color:#0000ff">Option</span> <span style="color:#0000ff">Explicit</span> <span style="color:#0000ff">On</span> </span>
+<span class="odt-code-line"><span style="color:#0000ff">Option</span> <span style="color:#0000ff">Strict</span> <span style="color:#0000ff">On</span></span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">&#x27; utilisation de threads</span>
+<span class="odt-code-line"><span style="color:#0000ff">Imports</span> System</span>
+<span class="odt-code-line"><span style="color:#0000ff">Imports</span> System.Threading</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line"><span style="color:#0000ff">Public</span> <span style="color:#0000ff">Class</span> thread3</span>
+<span class="odt-code-line">    <span style="font-weight:bold;color:#ff0000">&#x27; variables de classe</span></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Private</span> <span style="color:#0000ff">Shared</span> cptrThreads <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span> = 0</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Public</span> <span style="color:#0000ff">Overloads</span> <span style="color:#0000ff">Shared</span> <span style="color:#0000ff">Sub</span> Main(<span style="color:#0000ff">ByVal</span> args() <span style="color:#0000ff">As</span> [String])</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; mode d&#x27;emploi</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Const</span> syntaxe <span style="color:#0000ff">As</span> <span style="color:#0000ff">String</span> = &quot;pg nbThreads&quot;</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Const</span> nbMaxThreads <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span> = 100</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; vérification nbre d&#x27;arguments</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">If</span> args.Length &lt;&gt; 1 <span style="color:#0000ff">Then</span></span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; erreur</span></span>
+<span class="odt-code-line">            Console.Error.WriteLine(syntaxe)</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; arrêt</span></span>
+<span class="odt-code-line">            Environment.Exit(1)</span>
+<span class="odt-code-line">        <span style="color:#0000ff">End</span> <span style="color:#0000ff">If</span></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; vérification qualité de l&#x27;argument</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> nbThreads <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span> = 0</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Try</span></span>
+<span class="odt-code-line">            nbThreads = <span style="color:#0000ff">Integer</span>.Parse(args(0))</span>
+<span class="odt-code-line">            <span style="color:#0000ff">If</span> nbThreads &lt; 1 <span style="color:#0000ff">Or</span> nbThreads &gt; nbMaxThreads <span style="color:#0000ff">Then</span></span>
+<span class="odt-code-line">                <span style="color:#0000ff">Throw</span> <span style="color:#0000ff">New</span> Exception</span>
+<span class="odt-code-line">            <span style="color:#0000ff">End</span> <span style="color:#0000ff">If</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Catch</span></span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; erreur</span></span>
+<span class="odt-code-line">            Console.Error.WriteLine(&quot;Nombre de threads incorrect (entre 1 et &quot; &amp; nbMaxThreads &amp; &quot;)&quot;)</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; fin</span></span>
+<span class="odt-code-line">            Environment.Exit(2)</span>
+<span class="odt-code-line">        <span style="color:#0000ff">End</span> <span style="color:#0000ff">Try</span></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; création et génération des threads</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> threads(nbThreads - 1) <span style="color:#0000ff">As</span> Thread</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> i <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">For</span> i = 0 <span style="color:#0000ff">To</span> nbThreads - 1</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; création</span></span>
+<span class="odt-code-line">            threads(i) = <span style="color:#0000ff">New</span> Thread(<span style="color:#0000ff">New</span> ThreadStart(<span style="color:#0000ff">AddressOf</span> incrémente))</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; nommage</span></span>
+<span class="odt-code-line">            threads(i).Name = &quot;tache_&quot; &amp; i</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; lancement</span></span>
+<span class="odt-code-line">            threads(i).Start()</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Next</span> i</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; attente de la fin des threads</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">For</span> i = 0 <span style="color:#0000ff">To</span> nbThreads - 1</span>
+<span class="odt-code-line">            threads(i).Join()</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Next</span> i        <span style="font-weight:bold;color:#ff0000">&#x27; affichage compteur</span></span>
+<span class="odt-code-line">        Console.Out.WriteLine((&quot;Nombre de threads générés : &quot; &amp; cptrThreads))</span>
+<span class="odt-code-line">    <span style="color:#0000ff">End</span> <span style="color:#0000ff">Sub</span></span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Public</span> <span style="color:#0000ff">Shared</span> <span style="color:#0000ff">Sub</span> incrémente()</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; augmente le compteur de threads</span></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; lecture compteur</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> valeur <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span> = cptrThreads</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; suivi</span></span>
+<span class="odt-code-line">        Console.Out.WriteLine((&quot;A &quot; + DateTime.Now.ToString(&quot;hh:mm:ss&quot;) &amp; &quot;, le thread &quot; &amp; Thread.CurrentThread.Name &amp; &quot; a lu la valeur du compteur : &quot; &amp; cptrThreads))</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; attente</span></span>
+<span class="odt-code-line">        Thread.Sleep(1000)</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; incrémentation compteur</span></span>
+<span class="odt-code-line">        cptrThreads = valeur + 1</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; suivi</span></span>
+<span class="odt-code-line">        Console.Out.WriteLine((&quot;A &quot; &amp; DateTime.Now.ToString(&quot;hh:mm:ss&quot;) &amp; &quot;, le thread &quot; &amp; Thread.CurrentThread.Name &amp; &quot; a écrit la valeur du compteur : &quot; &amp; cptrThreads))</span>
+<span class="odt-code-line">    <span style="color:#0000ff">End</span> <span style="color:#0000ff">Sub</span></span>
+<span class="odt-code-line"><span style="color:#0000ff">End</span> <span style="color:#0000ff">Class</span></span>
+</code></pre></div>
+
+<p>Nous ne nous attarderons pas sur la partie génération de threads déjà étudiée. Intéressons-nous plutôt à la méthode <em>incrémente</em>, utilisée par chaque thread pour incrémenter le compteur statique <em>cptrThreads</em>.</p>
+<ol>
+  <li>le compteur est lu
+  </li>
+  <li>le thread s&#x27;arrête 1 s. Il perd donc le processeur
+  </li>
+  <li>le compteur est incrémenté
+  </li>
+</ol>
+
+<p>L&#x27;étape 2 n&#x27;est là que pour forcer le thread à perdre le processeur. Celui-ci va être donné à un autre thread. Dans la pratique, rien n&#x27;assure qu&#x27;un thread ne sera pas interrompu entre le moment où il va lire le compteur et le moment où il va l&#x27;incrémenter. Le risque existe de perdre le processeur entre le moment où on lit la valeur du compteur et celui on écrit sa valeur incrémentée de 1. En effet, l&#x27;opération d&#x27;incrémentation va faire l&#x27;objet de plusieurs instructions élémentaires au niveau du processeur qui peuvent être interrompues. L&#x27;étape 2 de sommeil d&#x27;une seconde n&#x27;est donc là que pour systématiser ce risque. Les résultats obtenus sont les suivants :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-19-1" name="__codelineno-19-1" href="#__codelineno-19-1"></a>dos&gt;thread3 5
+<a id="__codelineno-19-2" name="__codelineno-19-2" href="#__codelineno-19-2"></a>A 05:44:34, le thread tache_0 a lu la valeur du compteur : 0
+<a id="__codelineno-19-3" name="__codelineno-19-3" href="#__codelineno-19-3"></a>A 05:44:34, le thread tache_1 a lu la valeur du compteur : 0
+<a id="__codelineno-19-4" name="__codelineno-19-4" href="#__codelineno-19-4"></a>A 05:44:34, le thread tache_2 a lu la valeur du compteur : 0
+<a id="__codelineno-19-5" name="__codelineno-19-5" href="#__codelineno-19-5"></a>A 05:44:34, le thread tache_3 a lu la valeur du compteur : 0
+<a id="__codelineno-19-6" name="__codelineno-19-6" href="#__codelineno-19-6"></a>A 05:44:34, le thread tache_4 a lu la valeur du compteur : 0
+<a id="__codelineno-19-7" name="__codelineno-19-7" href="#__codelineno-19-7"></a>A 05:44:35, le thread tache_0 a écrit la valeur du compteur : 1
+<a id="__codelineno-19-8" name="__codelineno-19-8" href="#__codelineno-19-8"></a>A 05:44:35, le thread tache_1 a écrit la valeur du compteur : 1
+<a id="__codelineno-19-9" name="__codelineno-19-9" href="#__codelineno-19-9"></a>A 05:44:35, le thread tache_2 a écrit la valeur du compteur : 1
+<a id="__codelineno-19-10" name="__codelineno-19-10" href="#__codelineno-19-10"></a>A 05:44:35, le thread tache_3 a écrit la valeur du compteur : 1
+<a id="__codelineno-19-11" name="__codelineno-19-11" href="#__codelineno-19-11"></a>A 05:44:35, le thread tache_4 a écrit la valeur du compteur : 1
+<a id="__codelineno-19-12" name="__codelineno-19-12" href="#__codelineno-19-12"></a>Nombre de threads générés : 1
+</code></pre></div>
+<p>A la lecture de ces résultats, on voit bien ce qui se passe :</p>
+<ul>
+  <li>un premier thread lit le compteur. Il trouve 0.
+  </li>
+  <li>il s&#x27;arrête 1 s donc perd le processeur
+  </li>
+  <li>un second thread prend alors le processeur et lit lui aussi la valeur du compteur. Elle est toujours à 0 puisque le thread précédent ne l&#x27;a pas encore incrémenté. Il s&#x27;arrête lui aussi 1 s.
+  </li>
+  <li>en 1 s, les 5 threads ont le temps de passer tous et de lire tous la valeur 0.
+  </li>
+  <li>lorsqu&#x27;ils vont se réveiller les uns après les autres, ils vont incrémenter la valeur 0 qu&#x27;ils ont lue et écrire la valeur 1 dans le compteur, ce que confirme le programme principal (Main).
+  </li>
+</ul>
+
+<p>D&#x27;où vient le problème ? Le second thread a lu une mauvaise valeur du fait que le premier avait été interrompu avant d&#x27;avoir terminé son travail qui était de mettre à jour le compteur dans la fenêtre. Cela nous amène à la notion de ressource critique et de section critique d&#x27;un programme: </p>
+<ul>
+  <li>une ressource critique est une ressource qui ne peut être détenue que par un thread à la fois. Ici la ressource critique est le compteur. 
+  </li>
+  <li>une section critique d&#x27;un programme est une séquence d&#x27;instructions dans le flux d&#x27;exécution d&#x27;un thread au cours de laquelle il accède à une ressource critique. On doit assurer qu&#x27;au cours de cette section critique, il est le seul à avoir accès à la ressource.
+  </li>
+</ul>
+
+<h2 id="85-acces-exclusif-a-une-ressource-partagee">8.5. Accès exclusif à une ressource partagée</h2>
+<p>Dans notre exemple, la section critique est le code situé entre la lecture du compteur et l&#x27;écriture de sa nouvelle valeur :</p>
+<div class="odt-code-rich" data-linenums="false" style="counter-reset: odtline 0;"><pre><code class="language-vbscript">
+<span class="odt-code-line">        &#x27; lecture compteur</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> valeur <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span> = cptrThreads</span>
+<span class="odt-code-line">        &#x27; attente</span>
+<span class="odt-code-line">        Thread.Sleep(1000)</span>
+<span class="odt-code-line">        &#x27; incrémentation compteur</span>
+<span class="odt-code-line">        cptrThreads = valeur + 1</span>
+</code></pre></div>
+
+<p>Pour exécuter ce code, un thread doit être assuré d&#x27;être tout seul. Il peut être interrompu mais pendant cette interruption, un autre thread ne doit pas pouvoir exécuter ce même code. La plate-forme .NET offre plusieurs outils pour assurer l&#x27;entrée unitaire dans les sections critiques de code. Nous utiliserons la classe <strong>Mutex</strong> :</p>
+<p><img src="images/1000000000000227000000D09EE4EEDC.png" style="width:14.577cm;height:5.503cm;" alt="Image" class="odt-zoomable" data-zoom-src="images/1000000000000227000000D09EE4EEDC.png" /></p>
+<p>Nous n&#x27;utiliserons ici que les constructeurs et méthodes suivants :</p>
+<table class="odt-table" style="border-collapse: collapse; width: 100%; margin-bottom: 1em;"><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><div markdown="block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-20-1" name="__codelineno-20-1" href="#__codelineno-20-1"></a>public Mutex()
+</code></pre></div>
+</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><p style="margin:0;">crée un objet de synchronisation M</p></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><div markdown="block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-21-1" name="__codelineno-21-1" href="#__codelineno-21-1"></a>public bool WaitOne()
+</code></pre></div>
+</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><p style="margin:0;">Le thread T1 qui exécute l&#x27;opération <i>M.WaitOne()</i> demande la propriété de l&#x27;objet de synchronisation M. Si le Mutex M n&#x27;est détenu par aucun thread (le cas au départ), il est &quot;donné&quot; au thread T1 qui l&#x27;a demandé. Si un peu plus tard, un thread T2 fait la même opération, il sera bloqué. En effet, un Mutex ne peut appartenir qu&#x27;à un thread. Il sera débloqué lorsque le thread T1 libèrera le mutex M qu&#x27;il détient. Plusieurs threads peuvent ainsi être bloqués en attente du Mutex M.</p></td></tr><tr><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><div markdown="block">
+<div class="highlight"><pre><span></span><code><a id="__codelineno-22-1" name="__codelineno-22-1" href="#__codelineno-22-1"></a>public void
+<a id="__codelineno-22-2" name="__codelineno-22-2" href="#__codelineno-22-2"></a>ReleaseMutex()
+</code></pre></div>
+</div></td><td style="border: 1px solid #ddd; padding: 8px; vertical-align: top;"><p style="margin:0;">Le thread T1 qui effectue l&#x27;opération <i>M.ReleaseMutex()</i> abandonne la propriété du Mutex M.Lorsque le thread T1 perdra le processeur, le système pourra le donner à l&#x27;un des threads en attente du Mutex M. Un seul l&#x27;obtiendra à son tour, les autres en attente de M restant bloqués </p></td></tr></table>
+
+<p>Un Mutex M gère l&#x27;accès à une ressource partagée R. Un thread demande la ressource R par <em>M.WaitOne()</em> et la rend par <em>M.ReleaseMutex()</em>. Une section critique de code qui ne doit être exécutée que par un seul thread à la fois est une ressource partagée. La synchronisation d&#x27;exécution de la section critique peut se faire ainsi :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-23-1" name="__codelineno-23-1" href="#__codelineno-23-1"></a>M.WaitOne()
+<a id="__codelineno-23-2" name="__codelineno-23-2" href="#__codelineno-23-2"></a>&#39; le thread est seul à entrer ici
+<a id="__codelineno-23-3" name="__codelineno-23-3" href="#__codelineno-23-3"></a>&#39; section critique
+<a id="__codelineno-23-4" name="__codelineno-23-4" href="#__codelineno-23-4"></a>....
+<a id="__codelineno-23-5" name="__codelineno-23-5" href="#__codelineno-23-5"></a>M.ReleaseMutex()
+</code></pre></div>
+<p>où M est un objet <em>Mutex</em>. Il faut bien sûr ne jamais oublier de libérer un <em>Mutex</em> devenu inutile pour qu&#x27;un autre thread puisse entrer dans la section critique, sinon les threads en attente d&#x27;un Mutex jamais libéré n&#x27;auront jamais accès au processeur. Par ailleurs, il faut éviter la situation d&#x27;interblocage (<em>deadlock</em>) dans laquelle deux threads s&#x27;attendent mutuellement. Considérons les actions suivantes qui se suivent dans le temps :</p>
+<ul>
+  <li>un thread T1 obtient la propriété d&#x27;un Mutex M1 pour avoir accès à une ressource partagée R1
+  </li>
+  <li>un thread T2 obtient la propriété d&#x27;un Mutex M2 pour avoir accès à une ressource partagée R2
+  </li>
+  <li>le thread T1 demande le Mutex M2. Il est bloqué.
+  </li>
+  <li>le thread T2 demande le Mutex M1. Il est bloqué.
+  </li>
+</ul>
+
+<p>Ici, les threads T1 et T2 s&#x27;attendent mutuellement. Ce cas apparaît lorsque des threads ont besoin de deux ressources partagées, la ressource R1 contrôlée par le Mutex M1 et la ressource R2 contrôlée par le Mutex M2. Une solution possible est de demander les deux ressources en même temps à l&#x27;aide d&#x27;un Mutex unique M. Mais ce n&#x27;est pas toujours possible si par exemple cela entraîne une mobilisation longue d&#x27;une ressource coûteuse. Une autre solution est qu&#x27;un thread ayant M1 et ne pouvant obtenir M2, relâche alors M1 pour éviter l&#x27;interblocage. Si nous mettons en pratique ce que nous venons de voir sur l&#x27;exemple précédent, notre application devient la suivante :</p>
+<div class="odt-code-rich" data-linenums="true" style="counter-reset: odtline 0;"><pre><code class="language-vb.net">
+<span class="odt-code-line">&#x27; options</span>
+<span class="odt-code-line"><span style="color:#0000ff">Option</span> <span style="color:#0000ff">Explicit</span> <span style="color:#0000ff">On</span> </span>
+<span class="odt-code-line"><span style="color:#0000ff">Option</span> <span style="color:#0000ff">Strict</span> <span style="color:#0000ff">On</span></span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">&#x27; utilisation de threads</span>
+<span class="odt-code-line"><span style="color:#0000ff">Imports</span> System</span>
+<span class="odt-code-line"><span style="color:#0000ff">Imports</span> System.Threading</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line"><span style="color:#0000ff">Public</span> <span style="color:#0000ff">Class</span> thread4</span>
+<span class="odt-code-line">    <span style="font-weight:bold;color:#ff0000">&#x27; variables de classe</span></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Private</span> <span style="color:#0000ff">Shared</span> cptrThreads <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span> = 0    <span style="font-weight:bold;color:#ff0000">&#x27; compteur de threads</span></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Private</span> <span style="color:#0000ff">Shared</span> autorisation <span style="color:#0000ff">As</span> Mutex</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Public</span> <span style="color:#0000ff">Overloads</span> <span style="color:#0000ff">Shared</span> <span style="color:#0000ff">Sub</span> Main(<span style="color:#0000ff">ByVal</span> args() <span style="color:#0000ff">As</span> [String])</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; mode d&#x27;emploi</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Const</span> syntaxe <span style="color:#0000ff">As</span> <span style="color:#0000ff">String</span> = &quot;pg nbThreads&quot;</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Const</span> nbMaxThreads <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span> = 100</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; vérification nbre d&#x27;arguments</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">If</span> args.Length &lt;&gt; 1 <span style="color:#0000ff">Then</span></span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; erreur</span></span>
+<span class="odt-code-line">            Console.Error.WriteLine(syntaxe)</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; arrêt</span></span>
+<span class="odt-code-line">            Environment.Exit(1)</span>
+<span class="odt-code-line">        <span style="color:#0000ff">End</span> <span style="color:#0000ff">If</span></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; vérification qualité de l&#x27;argument</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> nbThreads <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span> = 0</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Try</span></span>
+<span class="odt-code-line">            nbThreads = <span style="color:#0000ff">Integer</span>.Parse(args(0))</span>
+<span class="odt-code-line">            <span style="color:#0000ff">If</span> nbThreads &lt; 1 <span style="color:#0000ff">Or</span> nbThreads &gt; nbMaxThreads <span style="color:#0000ff">Then</span></span>
+<span class="odt-code-line">                <span style="color:#0000ff">Throw</span> <span style="color:#0000ff">New</span> Exception</span>
+<span class="odt-code-line">            <span style="color:#0000ff">End</span> <span style="color:#0000ff">If</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Catch</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">End</span> <span style="color:#0000ff">Try</span></span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; initialisation de l&#x27;autorisation d&#x27;accès à une section critique</span></span>
+<span class="odt-code-line">        autorisation = <span style="color:#0000ff">New</span> Mutex</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; création et génération des threads</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> threads(nbThreads) <span style="color:#0000ff">As</span> Thread</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> i <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">For</span> i = 0 <span style="color:#0000ff">To</span> nbThreads - 1</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; création</span></span>
+<span class="odt-code-line">            threads(i) = <span style="color:#0000ff">New</span> Thread(<span style="color:#0000ff">New</span> ThreadStart(<span style="color:#0000ff">AddressOf</span> incrémente))</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; nommage</span></span>
+<span class="odt-code-line">            threads(i).Name = &quot;tache_&quot; &amp; i</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; lancement</span></span>
+<span class="odt-code-line">            threads(i).Start()</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Next</span> i</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; attente de la fin des threads</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">For</span> i = 0 <span style="color:#0000ff">To</span> nbThreads - 1</span>
+<span class="odt-code-line">            threads(i).Join()</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Next</span> i</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; affichage compteur</span></span>
+<span class="odt-code-line">        Console.Out.WriteLine((&quot;Nombre de threads générés : &quot; &amp; cptrThreads))</span>
+<span class="odt-code-line">    <span style="color:#0000ff">End</span> <span style="color:#0000ff">Sub</span></span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Public</span> <span style="color:#0000ff">Shared</span> <span style="color:#0000ff">Sub</span> incrémente()</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; augmente le compteur de threads</span></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; on demande l&#x27;autorisation d&#x27;entrer dans la secton critique</span></span>
+<span class="odt-code-line">        autorisation.WaitOne()</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; lecture compteur</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> valeur <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span> = cptrThreads</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; suivi</span></span>
+<span class="odt-code-line">        Console.Out.WriteLine((&quot;A &quot; &amp; DateTime.Now.ToString(&quot;hh:mm:ss&quot;) &amp; &quot;, le thread &quot; &amp; Thread.CurrentThread.Name &amp; &quot; a lu la valeur du compteur : &quot; &amp; cptrThreads))</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; attente</span></span>
+<span class="odt-code-line">        Thread.Sleep(1000)</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; incrémentation compteur</span></span>
+<span class="odt-code-line">        cptrThreads = valeur + 1</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; suivi</span></span>
+<span class="odt-code-line">        Console.Out.WriteLine((&quot;A &quot; &amp; DateTime.Now.ToString(&quot;hh:mm:ss&quot;) &amp; &quot;, le thread &quot; &amp; Thread.CurrentThread.Name &amp; &quot; a écrit la valeur du compteur : &quot; &amp; cptrThreads))</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; on rend l&#x27;autorisation d&#x27;accès</span></span>
+<span class="odt-code-line">        autorisation.ReleaseMutex()</span>
+<span class="odt-code-line">    <span style="color:#0000ff">End</span> <span style="color:#0000ff">Sub</span></span>
+<span class="odt-code-line"><span style="color:#0000ff">End</span> <span style="color:#0000ff">Class</span></span>
+</code></pre></div>
+
+<p>Les résultats obtenus sont conformes à ce qui était attendu :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-24-1" name="__codelineno-24-1" href="#__codelineno-24-1"></a>dos&gt;thread4 5
+<a id="__codelineno-24-2" name="__codelineno-24-2" href="#__codelineno-24-2"></a>A 05:51:10, le thread tache_0 a lu la valeur du compteur : 0
+<a id="__codelineno-24-3" name="__codelineno-24-3" href="#__codelineno-24-3"></a>A 05:51:11, le thread tache_0 a écrit la valeur du compteur : 1
+<a id="__codelineno-24-4" name="__codelineno-24-4" href="#__codelineno-24-4"></a>A 05:51:11, le thread tache_1 a lu la valeur du compteur : 1
+<a id="__codelineno-24-5" name="__codelineno-24-5" href="#__codelineno-24-5"></a>A 05:51:12, le thread tache_1 a écrit la valeur du compteur : 2
+<a id="__codelineno-24-6" name="__codelineno-24-6" href="#__codelineno-24-6"></a>A 05:51:12, le thread tache_2 a lu la valeur du compteur : 2
+<a id="__codelineno-24-7" name="__codelineno-24-7" href="#__codelineno-24-7"></a>A 05:51:13, le thread tache_2 a écrit la valeur du compteur : 3
+<a id="__codelineno-24-8" name="__codelineno-24-8" href="#__codelineno-24-8"></a>A 05:51:13, le thread tache_3 a lu la valeur du compteur : 3
+<a id="__codelineno-24-9" name="__codelineno-24-9" href="#__codelineno-24-9"></a>A 05:51:14, le thread tache_3 a écrit la valeur du compteur : 4
+<a id="__codelineno-24-10" name="__codelineno-24-10" href="#__codelineno-24-10"></a>A 05:51:14, le thread tache_4 a lu la valeur du compteur : 4
+<a id="__codelineno-24-11" name="__codelineno-24-11" href="#__codelineno-24-11"></a>A 05:51:15, le thread tache_4 a écrit la valeur du compteur : 5
+<a id="__codelineno-24-12" name="__codelineno-24-12" href="#__codelineno-24-12"></a>Nombre de threads générés : 5
+</code></pre></div>
+<h2 id="86-synchronisation-par-evenements">8.6. Synchronisation par événements</h2>
+<p>Considérons la situation suivante, appelée parfois situation de <strong>producteurs-consommateurs</strong>. </p>
+<ol>
+  <li>On a un tableau dans lequel des processus viennent déposer des données (les producteurs) et d&#x27;autres viennent les lire (les consommateurs). 
+  </li>
+  <li>Les producteurs sont égaux entre-eux mais exclusifs : un seul producteur à la fois peut déposer ses données dans le tableau.
+  </li>
+  <li>Les consommateurs sont égaux entre-eux mais exclusifs : un seul lecteur à la fois peut lire les données déposées dans le tableau.
+  </li>
+  <li>Un consommateur ne peut lire les données du tableau que lorsqu&#x27;un producteur en a déposé dedans et un producteur ne peut déposer de nouvelles données dans le tableau que lorsque celles qui y sont ont été consommées.
+  </li>
+</ol>
+
+<p>On peut dans cet exposé distinguer deux ressources partagées :</p>
+<ol>
+    <ol>
+      <li>le tableau en écriture
+      </li>
+      <li>le tableau en lecture
+      </li>
+    </ol>
+</ol>
+
+<p>L&#x27;accès à ces deux ressources partagées peut être contrôlée par des Mutex comme vu précédemment, un pour chaque ressource. Une fois qu&#x27;un consommateur a obtenu le tableau en lecture, il doit vérifier qu&#x27;il y a bien des données dedans. On utilisera un événement pour l&#x27;en avertir. De même un producteur ayant obtenu le tableau en écriture devra attendre qu&#x27;un consommateur l&#x27;ait vidé. On utilisera là encore un événement.</p>
+<p>Les événements utilisés feront partie de la classe <em>AutoResetEvent</em> :</p>
+<p><img src="images/1000000000000224000000DCE09F5CC4.png" style="width:14.497cm;height:5.821cm;" alt="Image" class="odt-zoomable" data-zoom-src="images/1000000000000224000000DCE09F5CC4.png" /></p>
+<p>Ce type d&#x27;événement est analogue à un booléen mais évite des attentes actives ou semi-actives. Ainsi si le droit d&#x27;écriture est contrôlé par un booléen <em>peutEcrire</em>, un producteur avant d&#x27;écrire exécutera un code du genre :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-25-1" name="__codelineno-25-1" href="#__codelineno-25-1"></a>while(peutEcrire==false)        &#39; attente active
+</code></pre></div>
+<p>ou</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-26-1" name="__codelineno-26-1" href="#__codelineno-26-1"></a>while(peutEcrire==false) &#39; attente semi-active
+<a id="__codelineno-26-2" name="__codelineno-26-2" href="#__codelineno-26-2"></a>    Thread.Sleep(100)                &#39; attente de 100ms
+<a id="__codelineno-26-3" name="__codelineno-26-3" href="#__codelineno-26-3"></a>end while
+</code></pre></div>
+<p>Dans la première méthode, le thread mobilise inutilement le processeur. Dans la seconde, il vérifie l&#x27;état du booléen <em>peutEcrire</em> toutes les 100 ms. La classe <em>AutoResetEvent</em> permet encore d&#x27;améliorer les choses : le thread va demander à être réveillé lorsque l&#x27;événement qu&#x27;il attend se sera produit :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-27-1" name="__codelineno-27-1" href="#__codelineno-27-1"></a><span class="n">AutoEvent</span><span class="w"> </span><span class="n">peutEcrire</span><span class="o">=</span><span class="k">new</span><span class="w"> </span><span class="n">AutoResetEvent</span><span class="p">(</span><span class="k">false</span><span class="p">)</span><span class="w">        </span><span class="c">&#39; peutEcrire=false;</span>
+<a id="__codelineno-27-2" name="__codelineno-27-2" href="#__codelineno-27-2"></a><span class="p">....</span>
+<a id="__codelineno-27-3" name="__codelineno-27-3" href="#__codelineno-27-3"></a><span class="n">peutEcrire</span><span class="p">.</span><span class="n">WaitOne</span><span class="p">()</span><span class="w"> </span><span class="c">&#39; le thread attend que l&#39;évt peutEcrire passe à vrai</span>
+</code></pre></div>
+<p>L&#x27;opération </p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-28-1" name="__codelineno-28-1" href="#__codelineno-28-1"></a><span class="n">AutoEvent</span><span class="w"> </span><span class="n">peutEcrire</span><span class="o">=</span><span class="k">new</span><span class="w"> </span><span class="n">AutoResetEvent</span><span class="p">(</span><span class="k">false</span><span class="p">)</span><span class="w">        </span><span class="c">&#39; peutEcrire=false;</span>
+</code></pre></div>
+<p>initialise le booléen <em>peutEcrire</em> à <em>false</em>. L&#x27;opération</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-29-1" name="__codelineno-29-1" href="#__codelineno-29-1"></a>peutEcrire.WaitOne() &#39; le thread attend que l&#39;évt peutEcrire passe à vrai
+</code></pre></div>
+<p>exécutée par un thread fait que celui-ci passe si le booléen <em>peutEcrire</em> est vrai ou sinon est bloqué jusqu&#x27;à ce qu&#x27;il devienne vrai. Un autre thread le passera à vrai par l&#x27;opération  <em>peutEcrire.Set()</em> ou à faux par l&#x27;opération <em>peutEcrire.Reset()</em>.</p>
+<p>Le programme de producteurs-consommateurs est le suivant :</p>
+<div class="odt-code-rich" data-linenums="true" style="counter-reset: odtline 0;"><pre><code class="language-vb.net">
+<span class="odt-code-line">&#x27; utilisation de threads lecteurs et écrivains</span>
+<span class="odt-code-line">&#x27; illustre l&#x27;utilisation simultanée de ressources partagées et de synchronisation</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">&#x27; options</span>
+<span class="odt-code-line"><span style="color:#0000ff">Option</span> <span style="color:#0000ff">Explicit</span> <span style="color:#0000ff">On</span> </span>
+<span class="odt-code-line"><span style="color:#0000ff">Option</span> <span style="color:#0000ff">Strict</span> <span style="color:#0000ff">On</span></span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">&#x27; utilisation de threads</span>
+<span class="odt-code-line"><span style="color:#0000ff">Imports</span> System</span>
+<span class="odt-code-line"><span style="color:#0000ff">Imports</span> System.Threading</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line"><span style="color:#0000ff">Public</span> <span style="color:#0000ff">Class</span> lececr</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">    <span style="font-weight:bold;color:#ff0000">&#x27; variables de classe</span></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Private</span> <span style="color:#0000ff">Shared</span> data(5) <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span>    <span style="font-weight:bold;color:#ff0000">&#x27; ressource partagée entre threads lecteur et threads écrivain</span></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Private</span> <span style="color:#0000ff">Shared</span> lecteur <span style="color:#0000ff">As</span> Mutex    <span style="font-weight:bold;color:#ff0000">&#x27; variable de synchronisation pour lire le tableau</span></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Private</span> <span style="color:#0000ff">Shared</span> écrivain <span style="color:#0000ff">As</span> Mutex    <span style="font-weight:bold;color:#ff0000">&#x27; variable de synchronisation pour écrire dans le tableau</span></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Private</span> <span style="color:#0000ff">Shared</span> objRandom <span style="color:#0000ff">As</span> <span style="color:#0000ff">New</span> Random(DateTime.Now.Second)    <span style="font-weight:bold;color:#ff0000">&#x27; un générateur de nombres aléatoires</span></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Private</span> <span style="color:#0000ff">Shared</span> peutLire <span style="color:#0000ff">As</span> AutoResetEvent    <span style="font-weight:bold;color:#ff0000">&#x27; signale qu&#x27;on peut lire le contenu de data</span></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Private</span> <span style="color:#0000ff">Shared</span> peutEcrire <span style="color:#0000ff">As</span> AutoResetEvent</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Public</span> <span style="color:#0000ff">Shared</span> <span style="color:#0000ff">Sub</span> Main(<span style="color:#0000ff">ByVal</span> args() <span style="color:#0000ff">As</span> [String])</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; le nbre de threads à générer</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Const</span> nbThreads <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span> = 3</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; initialisation des drapeaux</span></span>
+<span class="odt-code-line">        peutLire = <span style="color:#0000ff">New</span> AutoResetEvent(<span style="color:#0000ff">False</span>)        <span style="font-weight:bold;color:#ff0000">&#x27; on ne peut pas encore lire</span></span>
+<span class="odt-code-line">        peutEcrire = <span style="color:#0000ff">New</span> AutoResetEvent(<span style="color:#0000ff">True</span>)        <span style="font-weight:bold;color:#ff0000">&#x27; on peut déjà écrire</span></span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; initialisation des variables de synchronisation</span></span>
+<span class="odt-code-line">        lecteur = <span style="color:#0000ff">New</span> Mutex         <span style="font-weight:bold;color:#ff0000">&#x27; synchronise les lecteurs</span></span>
+<span class="odt-code-line">        écrivain = <span style="color:#0000ff">New</span> Mutex         <span style="font-weight:bold;color:#ff0000">&#x27; synchronise les écrivains</span></span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; création des threads lecteurs</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> lecteurs(nbThreads) <span style="color:#0000ff">As</span> Thread</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> i <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">For</span> i = 0 <span style="color:#0000ff">To</span> nbThreads - 1</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; création</span></span>
+<span class="odt-code-line">            lecteurs(i) = <span style="color:#0000ff">New</span> Thread(<span style="color:#0000ff">New</span> ThreadStart(<span style="color:#0000ff">AddressOf</span> lire))</span>
+<span class="odt-code-line">            lecteurs(i).Name = &quot;lecteur_&quot; &amp; i</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; lancement</span></span>
+<span class="odt-code-line">            lecteurs(i).Start()</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Next</span> i</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; création des threads écrivains</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> écrivains(nbThreads) <span style="color:#0000ff">As</span> Thread</span>
+<span class="odt-code-line">        <span style="color:#0000ff">For</span> i = 0 <span style="color:#0000ff">To</span> nbThreads - 1</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; création</span></span>
+<span class="odt-code-line">            écrivains(i) = <span style="color:#0000ff">New</span> Thread(<span style="color:#0000ff">New</span> ThreadStart(<span style="color:#0000ff">AddressOf</span> écrire))</span>
+<span class="odt-code-line">            écrivains(i).Name = &quot;écrivain_&quot; &amp; i</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; lancement</span></span>
+<span class="odt-code-line">            écrivains(i).Start()</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Next</span> i</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27;fin de main</span></span>
+<span class="odt-code-line">        Console.Out.WriteLine(&quot;fin de Main...&quot;)</span>
+<span class="odt-code-line">    <span style="color:#0000ff">End</span> <span style="color:#0000ff">Sub</span></span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">    <span style="font-weight:bold;color:#ff0000">&#x27; lire le contenu du tableau</span></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Public</span> <span style="color:#0000ff">Shared</span> <span style="color:#0000ff">Sub</span> lire()</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; section critique</span></span>
+<span class="odt-code-line">        lecteur.WaitOne()        <span style="font-weight:bold;color:#ff0000">&#x27; un seul lecteur peut passer</span></span>
+<span class="odt-code-line">        peutLire.WaitOne()        <span style="font-weight:bold;color:#ff0000">&#x27; on doit pouvoir lire</span></span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; lecture tableau</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> i <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">For</span> i = 0 <span style="color:#0000ff">To</span> data.Length - 1</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27;attente 1 s</span></span>
+<span class="odt-code-line">            Thread.Sleep(1000)</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; affichage</span></span>
+<span class="odt-code-line">            Console.Out.WriteLine((DateTime.Now.ToString(&quot;hh:mm:ss&quot;) &amp; &quot; : Le lecteur &quot; &amp; Thread.CurrentThread.Name &amp; &quot; a lu le nombre &quot; &amp; data(i)))</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Next</span> i</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; on ne peut plus lire</span></span>
+<span class="odt-code-line">        peutLire.Reset()</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; on peut écrire</span></span>
+<span class="odt-code-line">        peutEcrire.Set()</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; fin de section critique</span></span>
+<span class="odt-code-line">        lecteur.ReleaseMutex()</span>
+<span class="odt-code-line">    <span style="color:#0000ff">End</span> <span style="color:#0000ff">Sub</span></span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">    <span style="font-weight:bold;color:#ff0000">&#x27; écrire dans le tableau</span></span>
+<span class="odt-code-line">    <span style="color:#0000ff">Public</span> <span style="color:#0000ff">Shared</span> <span style="color:#0000ff">Sub</span> écrire()</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; section critique</span></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; un seul écrivain peut passer</span></span>
+<span class="odt-code-line">        écrivain.WaitOne()</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; on doit attendre l&#x27;autorisation d&#x27;écriture</span></span>
+<span class="odt-code-line">        peutEcrire.WaitOne()</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; écriture tableau</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">Dim</span> i <span style="color:#0000ff">As</span> <span style="color:#0000ff">Integer</span></span>
+<span class="odt-code-line">        <span style="color:#0000ff">For</span> i = 0 <span style="color:#0000ff">To</span> data.Length - 1</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27;attente 1 s</span></span>
+<span class="odt-code-line">            Thread.Sleep(1000)</span>
+<span class="odt-code-line">            <span style="font-weight:bold;color:#ff0000">&#x27; affichage</span></span>
+<span class="odt-code-line">            data(i) = objRandom.Next(0, 1000)</span>
+<span class="odt-code-line">            Console.Out.WriteLine((DateTime.Now.ToString(&quot;hh:mm:ss&quot;) &amp; &quot; : L&#x27;écrivain &quot; &amp; Thread.CurrentThread.Name &amp; &quot; a écrit le nombre &quot; &amp; data(i)))</span>
+<span class="odt-code-line">        <span style="color:#0000ff">Next</span> i</span>
+<span class="odt-code-line"></span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; on ne peut plus écrire</span></span>
+<span class="odt-code-line">        peutEcrire.Reset()</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27; on peut lire</span></span>
+<span class="odt-code-line">        peutLire.Set()</span>
+<span class="odt-code-line">        <span style="font-weight:bold;color:#ff0000">&#x27;fin de section critique</span></span>
+<span class="odt-code-line">        écrivain.ReleaseMutex()</span>
+<span class="odt-code-line">    <span style="color:#0000ff">End</span> <span style="color:#0000ff">Sub</span></span>
+<span class="odt-code-line"><span style="color:#0000ff">End</span> <span style="color:#0000ff">Class</span></span>
+</code></pre></div>
+
+<p>L&#x27;exécution donne les résultats suivants :</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-30-1" name="__codelineno-30-1" href="#__codelineno-30-1"></a>dos&gt;lececr
+<a id="__codelineno-30-2" name="__codelineno-30-2" href="#__codelineno-30-2"></a>fin de Main...
+<a id="__codelineno-30-3" name="__codelineno-30-3" href="#__codelineno-30-3"></a>05:56:56 : L&#39;écrivain écrivain_0 a écrit le nombre 459
+<a id="__codelineno-30-4" name="__codelineno-30-4" href="#__codelineno-30-4"></a>05:56:57 : L&#39;écrivain écrivain_0 a écrit le nombre 955
+<a id="__codelineno-30-5" name="__codelineno-30-5" href="#__codelineno-30-5"></a>05:56:58 : L&#39;écrivain écrivain_0 a écrit le nombre 212
+<a id="__codelineno-30-6" name="__codelineno-30-6" href="#__codelineno-30-6"></a>05:56:59 : L&#39;écrivain écrivain_0 a écrit le nombre 297
+<a id="__codelineno-30-7" name="__codelineno-30-7" href="#__codelineno-30-7"></a>05:57:00 : L&#39;écrivain écrivain_0 a écrit le nombre 37
+<a id="__codelineno-30-8" name="__codelineno-30-8" href="#__codelineno-30-8"></a>05:57:01 : L&#39;écrivain écrivain_0 a écrit le nombre 623
+<a id="__codelineno-30-9" name="__codelineno-30-9" href="#__codelineno-30-9"></a>05:57:02 : Le lecteur lecteur_0 a lu le nombre 459
+<a id="__codelineno-30-10" name="__codelineno-30-10" href="#__codelineno-30-10"></a>05:57:03 : Le lecteur lecteur_0 a lu le nombre 955
+<a id="__codelineno-30-11" name="__codelineno-30-11" href="#__codelineno-30-11"></a>05:57:04 : Le lecteur lecteur_0 a lu le nombre 212
+<a id="__codelineno-30-12" name="__codelineno-30-12" href="#__codelineno-30-12"></a>05:57:05 : Le lecteur lecteur_0 a lu le nombre 297
+<a id="__codelineno-30-13" name="__codelineno-30-13" href="#__codelineno-30-13"></a>05:57:06 : Le lecteur lecteur_0 a lu le nombre 37
+<a id="__codelineno-30-14" name="__codelineno-30-14" href="#__codelineno-30-14"></a>05:57:07 : Le lecteur lecteur_0 a lu le nombre 623
+<a id="__codelineno-30-15" name="__codelineno-30-15" href="#__codelineno-30-15"></a>05:57:08 : L&#39;écrivain écrivain_1 a écrit le nombre 549
+<a id="__codelineno-30-16" name="__codelineno-30-16" href="#__codelineno-30-16"></a>05:57:09 : L&#39;écrivain écrivain_1 a écrit le nombre 34
+<a id="__codelineno-30-17" name="__codelineno-30-17" href="#__codelineno-30-17"></a>05:57:10 : L&#39;écrivain écrivain_1 a écrit le nombre 781
+<a id="__codelineno-30-18" name="__codelineno-30-18" href="#__codelineno-30-18"></a>05:57:11 : L&#39;écrivain écrivain_1 a écrit le nombre 555
+<a id="__codelineno-30-19" name="__codelineno-30-19" href="#__codelineno-30-19"></a>05:57:12 : L&#39;écrivain écrivain_1 a écrit le nombre 812
+<a id="__codelineno-30-20" name="__codelineno-30-20" href="#__codelineno-30-20"></a>05:57:13 : L&#39;écrivain écrivain_1 a écrit le nombre 406
+<a id="__codelineno-30-21" name="__codelineno-30-21" href="#__codelineno-30-21"></a>05:57:14 : Le lecteur lecteur_1 a lu le nombre 549
+<a id="__codelineno-30-22" name="__codelineno-30-22" href="#__codelineno-30-22"></a>05:57:15 : Le lecteur lecteur_1 a lu le nombre 34
+<a id="__codelineno-30-23" name="__codelineno-30-23" href="#__codelineno-30-23"></a>05:57:16 : Le lecteur lecteur_1 a lu le nombre 781
+<a id="__codelineno-30-24" name="__codelineno-30-24" href="#__codelineno-30-24"></a>05:57:17 : Le lecteur lecteur_1 a lu le nombre 555
+<a id="__codelineno-30-25" name="__codelineno-30-25" href="#__codelineno-30-25"></a>05:57:18 : Le lecteur lecteur_1 a lu le nombre 812
+<a id="__codelineno-30-26" name="__codelineno-30-26" href="#__codelineno-30-26"></a>05:57:19 : Le lecteur lecteur_1 a lu le nombre 406
+<a id="__codelineno-30-27" name="__codelineno-30-27" href="#__codelineno-30-27"></a>05:57:20 : L&#39;écrivain écrivain_2 a écrit le nombre 442
+<a id="__codelineno-30-28" name="__codelineno-30-28" href="#__codelineno-30-28"></a>05:57:21 : L&#39;écrivain écrivain_2 a écrit le nombre 83
+<a id="__codelineno-30-29" name="__codelineno-30-29" href="#__codelineno-30-29"></a>^C
+</code></pre></div>
+<p>On peut remarquer les points suivants :</p>
+<ul>
+  <li>on a bien 1 seul lecteur à la fois bien que celui-ci perde le processeur dans la section critique <i>lire</i>
+  </li>
+  <li>on a bien 1 seul écrivain à la fois bien que celui-ci perde le processeur dans la section critique <i>écrire</i>
+  </li>
+  <li>un lecteur ne lit que lorsqu&#x27;il y a quelque chose à lire dans le tableau
+  </li>
+  <li>un écrivain n&#x27;écrit que lorsque le tableau a été entièrement lu
+  </li>
+</ul>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner">
+
+      <div>
+        <a href="https://tahe.developpez.com" target="_blank">
+          https://tahe.developpez.com
+        </a>
+        <br>
+        Ce cours-tutoriel écrit par <strong>Serge Tahé</strong> est mis à disposition du public selon les termes de la
+        <em>Licence Creative Commons Attribution – Pas d’Utilisation Commerciale –
+        Partage dans les Mêmes Conditions 3.0 non transposé</em>.
+      </div>
+
+    </div>
+  </div>
+
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.sections", "navigation.indexes", "navigation.expand", "toc.integrate", "navigation.top"], "search": "assets/javascripts/workers/search.7a47a382.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="assets/javascripts/bundle.e71a0d61.min.js"></script>
+      
+        <script src="javascripts/focus.js"></script>
+      
+    
+  </body>
+</html>
